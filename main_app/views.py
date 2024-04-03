@@ -23,3 +23,12 @@ def cats_index(request):
 		# res.render('cats/index', {'cats': cats})
 	})
 
+# cat_id comes from the path in the urls.py 
+# path('cats/<int:cat_id>/', views.cats_detail, name='detail'),
+def cats_detail(request, cat_id):
+	# tell the model to find the row that matches cat_id from the request in the database
+	cat = Cat.objects.get(id=cat_id)
+	return render(request, 'cats/detail.html', {
+		'cat': cat
+		# cat (the key) is the variable name in cats/detail.html 
+	})
