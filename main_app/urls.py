@@ -7,4 +7,5 @@ urlpatterns = [
 	# django's convention is to use a trailing / for 
 	# the routE
 	path('about/', views.about, name='about'),
+	path('cats/', views.cats_index, name="index"),
 ]
