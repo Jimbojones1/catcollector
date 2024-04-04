@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 # from the ./models import Cat
@@ -67,3 +67,19 @@ def cats_detail(request, cat_id):
 		'feeding_form': feeding_form
 		# 'cat is the variable name in cats/detail.html 
 	})
+
+# 'cats/<int:cat_id>/add_feeding/'
+def add_feeding(request, cat_id):
+	# process the form request form the client
+	form = FeedingForm(request.POST)
+	# request.POST is like req.body, its the contents of the form
+	# validate the form
+	if form.is_valid():
+		# create an in memory instance (on django) of our data
+		# to be added to psql, commit=False, don't save to db yet
+		new_feeding = form.save(commit=False)
+		# now we want to make sure we add the cat id to the new_feeding
+		new_feeding.cat_id = cat_id
+		new_feeding.save() # this is adding a feeding row to the feeding table in psql
+	return redirect('detail', cat_id=cat_id) #cat_id is the name of the param in the url path, 
+	# cat_id, is the id of the cat from the url request

@@ -27,7 +27,7 @@
     <!-- if the action is left blank its submits to the same
     place used to get the form, which is in this case 
     /cats/4, /cats/someid -->
-    <form action="" method="POST">
+    <form action="{% url 'add_feeding' cat.id %}" method="POST">
       {% csrf_token %}
 
       {{ feeding_form.as_p }}
@@ -62,7 +62,6 @@
 
   const selectEl = document.querySelector('#id_meal')
   M.FormSelect.init(selectEl)
-
 </script>
 
 
