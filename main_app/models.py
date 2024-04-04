@@ -13,6 +13,7 @@ class Cat(models.Model):
     def __str__(self):
         return self.name
 
+    # this can handle create, update actions
     def get_absolute_url(self):
         # 'detail is refering to the name of the url we want to redirect to'
         # path('cats/<int:cat_id>/', views.cats_detail, name='detail'),

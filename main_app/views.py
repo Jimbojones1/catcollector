@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 # from the ./models import Cat
 from .models import Cat
 
@@ -14,11 +14,31 @@ def home(request):
 def about(request):
 	return render(request, 'about.html')
 
-
-
+# CatCreate reuses the same template as the CatUpdate
+# <your app>/<model_name>_form.html
+# ex. templates/main_app/cat_form.html
+# handle get requests to cat/create
+# handles post requests to cat/create
 class CatCreate(CreateView):
 	model = Cat 
 	fields = '__all__'
+
+# CatUpdate reuses the same template as the CatCreate
+# <your app>/<model_name>_form.html
+# ex. templates/main_app/cat_form.html
+class CatUpdate(UpdateView):
+	model = Cat
+	# disallow renaming of the cat
+	fields = ['breed', 'description', 'age']
+	# uses def get_absolute_url in models.py to redirect the put request
+	# back to the the detail page of the cat just updated
+
+class CatDelete(DeleteView):
+	model = Cat 
+	# define the success_url here because the def get_absolute_url in the models.property
+	# redirects to a detail page which doesn't make sense since we deleted it
+	success_url = '/cats' # redirect to cats_index path
+
 
 
 def cats_index(request):
