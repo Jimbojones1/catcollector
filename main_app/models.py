@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
@@ -11,3 +12,12 @@ class Cat(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        # 'detail is refering to the name of the url we want to redirect to'
+        # path('cats/<int:cat_id>/', views.cats_detail, name='detail'),
+        return reverse('detail', kwargs={'cat_id': self.id})
+                                # cat_id refers to the name of the param
+                                # refer to the route above, and the value, 
+                                # self.id, refers to the cat that was just created
+                                # on the post request

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+<h1>Add a Cat</h1>
+
+<!-- Leaving the action empty makes the form post to the same url used to display it -->
+<form action="" method="POST">
+	{% csrf_token %}
+
+	<table>
+		<!-- the form variable comes from the CreateCat cbv (class based view) which is created from the model Cat -->
+		{{ form.as_table }}
+	</table>
+	<input type="submit" value="Submit!" class="btn">
+</form>
+{% endblock content %}
