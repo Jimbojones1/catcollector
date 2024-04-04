@@ -4,6 +4,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 # from the ./models import Cat
 from .models import Cat
 
+from .forms import FeedingForm
 # Add this cats list below the imports
 # Create your views here.
 def home(request):
@@ -57,7 +58,12 @@ def cats_index(request):
 def cats_detail(request, cat_id):
 	# tell the model to find the row that matches cat_id from the request in the database
 	cat = Cat.objects.get(id=cat_id)
+
+	# instatiate the feeding form class to create an instance of the class
+	# in otherwords a form object
+	feeding_form = FeedingForm()
 	return render(request, 'cats/detail.html', {
-		'cat': cat
+		'cat': cat,
+		'feeding_form': feeding_form
 		# 'cat is the variable name in cats/detail.html 
 	})

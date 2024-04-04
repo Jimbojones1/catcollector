@@ -32,7 +32,7 @@ MEALS = (
 
 # One Cat has many Feedings, A feeding belongs to a cat
 class Feeding(models.Model):
-    date = models.DateField()
+    date = models.DateField('feeding date')
     meal = models.CharField(
         max_length=1,
         # add the 'choices' field option
