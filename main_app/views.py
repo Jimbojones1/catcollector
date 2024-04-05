@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
@@ -16,6 +16,13 @@ def home(request):
 def about(request):
 	return render(request, 'about.html')
 
+
+# cats/<int:cat_id>/assoc_toy/<int:toy_id>/
+def assoc_toy(request, cat_id, toy_id):
+	print(cat_id, toy_id )
+	cat = Cat.objects.get(id=cat_id)
+	cat.toys.add(toy_id)# adding a row to our through table the one with 2 foriegn keys in sql
+	return redirect('detail', cat_id=cat_id)
 # CatCreate reuses the same template as the CatUpdate
 # <your app>/<model_name>_form.html
 # ex. templates/main_app/cat_form.html
@@ -72,6 +79,7 @@ def cats_detail(request, cat_id):
 	# instatiate the feeding form class to create an instance of the class
 	# in otherwords a form object
 	feeding_form = FeedingForm()
+	print(cat.__dict__)
 	return render(request, 'cats/detail.html', {
 		'cat': cat,
 		'feeding_form': feeding_form,
