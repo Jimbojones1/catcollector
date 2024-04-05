@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView
 # from the ./models import Cat
-from .models import Cat
+from .models import Cat, Toy
 
 from .forms import FeedingForm
 # Add this cats list below the imports
@@ -83,3 +84,26 @@ def add_feeding(request, cat_id):
 		new_feeding.save() # this is adding a feeding row to the feeding table in psql
 	return redirect('detail', cat_id=cat_id) #cat_id is the name of the param in the url path, 
 	# cat_id, is the id of the cat from the url request
+
+
+class ToyList(ListView):
+    model = Toy
+
+
+class ToyDetail(DetailView):
+    model = Toy
+
+
+class ToyCreate(CreateView):
+    model = Toy
+    fields = '__all__'
+
+
+class ToyUpdate(UpdateView):
+    model = Toy
+    fields = ['name', 'color']
+
+
+class ToyDelete(DeleteView):
+    model = Toy
+    success_url = '/toys/'
