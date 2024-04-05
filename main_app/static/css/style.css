@@ -14,3 +14,7 @@ body {
 	padding-top: 0;
 	text-align: right;
   }
+
+  .datepicker-date-display {
+	background-color: #1b5e20
+  }
