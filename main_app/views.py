@@ -60,12 +60,22 @@ def cats_detail(request, cat_id):
 	# tell the model to find the row that matches cat_id from the request in the database
 	cat = Cat.objects.get(id=cat_id)
 
+	# We want to search for all the toys that cat does not have!
+
+	# 1. create a list of ids of the toys the cat does have!
+	id_list = cat.toys.all().values_list('id')
+	# Now we can query the toys table for a the toys 
+	# that are not in the id_list!     field looksup in django (google this)
+	toys_cat_doesnt_have = Toy.objects.exclude(id__in=id_list)
+
+
 	# instatiate the feeding form class to create an instance of the class
 	# in otherwords a form object
 	feeding_form = FeedingForm()
 	return render(request, 'cats/detail.html', {
 		'cat': cat,
-		'feeding_form': feeding_form
+		'feeding_form': feeding_form,
+		'toys': toys_cat_doesnt_have
 		# 'cat is the variable name in cats/detail.html 
 	})
 
