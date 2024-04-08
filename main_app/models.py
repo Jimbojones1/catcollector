@@ -14,6 +14,15 @@ class Toy(models.Model):
     def get_absolute_url(self):
         return reverse('toys_detail', kwargs={'pk': self.id})
 
+
+
+
+
+
+
+
+
+
 class Cat(models.Model):
     name = models.CharField(max_length=100)
     breed = models.CharField(max_length=100)
@@ -34,6 +43,17 @@ class Cat(models.Model):
         # refer to the route above, and the value,
         # self.id, refers to the cat that was just created
         # on the post request
+
+
+class Photo(models.Model):
+    url = models.CharField(max_length=200)
+    # cat_id, django automatically adds the _id to conform to psql conventions
+    # 1 to many relationship
+    cat = models.ForeignKey(Cat, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f"Photo for cat_id: {self.cat_id} @{self.url}"
+
 
 
 MEALS = (("B", "Breakfast"), ("L", "Lunch"), ("D", "Dinner"))

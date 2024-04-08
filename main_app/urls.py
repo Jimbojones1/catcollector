@@ -14,8 +14,12 @@ urlpatterns = [
 	# which is another for id
     path('cats/<int:pk>/update/', views.CatUpdate.as_view(), name='cats_update'),
     path('cats/<int:pk>/delete/', views.CatDelete.as_view(), name='cats_delete'),
+ # backend route for one to many
 	path('cats/<int:cat_id>/add_feeding/', views.add_feeding, name='add_feeding'),
+    path('cats/<int:cat_id>/add_photo/', views.add_photo, name='add_photo'),
+    #backend route for many to many
     path('cats/<int:cat_id>/assoc_toy/<int:toy_id>/', views.assoc_toy, name='assoc_toy'),
+    path('cats/<int:cat_id>/disassoc_toy/<int:toy_id>/', views.disassoc_toy, name='disassoc_toy'),
     path('toys/', views.ToyList.as_view(), name='toys_index'),
     path('toys/<int:pk>/', views.ToyDetail.as_view(), name='toys_detail'),
     path('toys/create/', views.ToyCreate.as_view(), name='toys_create'),
