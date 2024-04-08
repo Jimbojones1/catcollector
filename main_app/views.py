@@ -64,7 +64,7 @@ def assoc_toy(request, cat_id, toy_id):
 # handles post requests to cat/create
 class CatCreate(CreateView):
 	model = Cat 
-	fields = '__all__'
+	fields = ['name', 'breed', 'description', 'age']
 
 # CatUpdate reuses the same template as the CatCreate
 # <your app>/<model_name>_form.html
