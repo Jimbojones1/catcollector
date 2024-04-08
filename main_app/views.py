@@ -3,6 +3,14 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 
+# this is for login stuff
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+
+# FOr Authorization
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin # CBV
+
 # stuff for photo upload for aws
 import uuid # for random numbers (used in generating photo name)
 import boto3 # aws sdk that lets us talk to our s3 bucket
@@ -14,6 +22,28 @@ from .models import Cat, Toy, Photo
 from .forms import FeedingForm
 # Add this cats list below the imports
 # Create your views here.
+
+def signup(request):
+	error_message = ''
+	if request.method == "POST":
+		# create the user form object 
+		# request.POST is the contents of the form
+		form = UserCreationForm(request.POST)
+		if form.is_valid():
+			# save the user to the database
+			user = form.save() # this adds user to the table in psql
+			# login our user
+			login(request, user)
+			return redirect('index') # index is the name of the url path
+		else:
+			error_message = "Invalid signup - try again"
+	form = UserCreationForm()
+	return render(request, 'registration/signup.html', {
+		'error_message': error_message,
+		'form': form
+	})
+
+
 def home(request):
 	cats = Cat.objects.all()
 
@@ -62,21 +92,29 @@ def assoc_toy(request, cat_id, toy_id):
 # ex. templates/main_app/cat_form.html
 # handle get requests to cat/create
 # handles post requests to cat/create
-class CatCreate(CreateView):
+class CatCreate(LoginRequiredMixin, CreateView):
 	model = Cat 
 	fields = ['name', 'breed', 'description', 'age']
+
+	# inhertied method called form valid 
+	def form_valid(self, form):
+		# assign the logged in user self.request.user
+		form.instance.user = self.request.user
+		# Let the create view finish adding the row 
+		# to psql
+		return super().form_valid(form)
 
 # CatUpdate reuses the same template as the CatCreate
 # <your app>/<model_name>_form.html
 # ex. templates/main_app/cat_form.html
-class CatUpdate(UpdateView):
+class CatUpdate(LoginRequiredMixin, UpdateView):
 	model = Cat
 	# disallow renaming of the cat
 	fields = ['breed', 'description', 'age']
 	# uses def get_absolute_url in models.py to redirect the put request
 	# back to the the detail page of the cat just updated
 
-class CatDelete(DeleteView):
+class CatDelete(LoginRequiredMixin, DeleteView):
 	model = Cat 
 	# define the success_url here because the def get_absolute_url in the models.property
 	# redirects to a detail page which doesn't make sense since we deleted it
@@ -87,7 +125,9 @@ class CatDelete(DeleteView):
 def cats_index(request):
 
 	# tell the model to find all the rows in the cats table!
-	cats = Cat.objects.all()
+	# cats = Cat.objects.all()
+	# Only grab the logged in users cats
+	cats = Cat.objects.filter(user=request.user)
 	return render(request, 'cats/index.html', {
 		'cats': cats
 		# 'cats' becomes a variable name in 'cats/index.html'
@@ -97,6 +137,8 @@ def cats_index(request):
 
 # cat_id comes from the path in the urls.py 
 # path('cats/<int:cat_id>/', views.cats_detail, name='detail'),
+@login_required # decorator function, which is a function that gets called right before the 
+# cats_detail
 def cats_detail(request, cat_id):
 	# tell the model to find the row that matches cat_id from the request in the database
 	cat = Cat.objects.get(id=cat_id)
