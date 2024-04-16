@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, HttpResponse
+from django.core import serializers
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
-
+import json
 # this is for login stuff
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
@@ -46,8 +47,10 @@ def signup(request):
 
 def home(request):
 	cats = Cat.objects.all()
-
-	return render(request, 'home.html')
+	cats_parsed = list(cats.values())
+	historicals = serializers.serialize("json", Cat.objects.all())
+	print(cats_parsed)
+	return render(request, 'home.html', {'arr': cats_parsed})
 
 def about(request):
 	return render(request, 'about.html')
