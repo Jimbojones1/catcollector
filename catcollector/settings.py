@@ -13,6 +13,8 @@ import os
 from pathlib import Path
 import environ
 import dj_database_url
+environ.Env()
+environ.Env.read_env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,8 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-sq2=iu9u*!6k$46^tfo^ax2uqdy+#7d(%5^3eg2=gjgmf@y9bt"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ['DEBUG']
-
+DEBUG = True
 
 ALLOWED_HOSTS = ['catcollector-qkvo.onrender.com', 'localhost']
 
