@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-sq2=iu9u*!6k$46^tfo^ax2uqdy+#7d(%5^3eg2=gjgmf@y9bt
 DEBUG = os.environ['DEBUG']
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['catcollector-qkvo.onrender.com', 'localhost']
 
 
 # Application definition
