@@ -17,8 +17,7 @@ username="admin"
 email="admin@example.com"
 password="hardcodedpassword123"
 
-# Django's manage.py path
-manage_py_path="./"
+
 
 # Create Django superuser
 echo "Creating Django superuser..."
@@ -28,7 +27,7 @@ python manage.py createsuperuser --username $username --email $email --noinput
 echo "Setting password for the superuser..."
 echo "$password
 $password
-" | python $manage_py_path changepassword $username
+" | python manage.py changepassword $username
 
 # Check if superuser creation was successful
 if [ $? -eq 0 ]; then
